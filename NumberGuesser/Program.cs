@@ -48,7 +48,12 @@ namespace NumberGuesser
                                 }
                                 else
                                 {
-                                    Console.WriteLine($"Sorry, {parsedGuess} is too low!");
+                                    Console.Write($"Sorry, {parsedGuess} is too low!");
+                                    if (parsedGuess < position)
+                                    {
+                                        Console.Write(" You already knew it'd be low.");
+                                    }
+                                    Console.WriteLine("");
                                     pastGuesses[i] = parsedGuess;
                                 }
                                 break;
@@ -66,7 +71,12 @@ namespace NumberGuesser
                                 }
                                 else
                                 {
-                                    Console.WriteLine($"Sorry, {parsedGuess} is too high!");
+                                    Console.Write($"Sorry, {parsedGuess} is too high!");
+                                    if (parsedGuess > position)
+                                    {
+                                        Console.Write(" You already knew it'd be high.");
+                                    }
+                                    Console.WriteLine("");
                                     pastGuesses[i] = parsedGuess;
                                 }
                                 break;
