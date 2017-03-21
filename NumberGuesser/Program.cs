@@ -80,11 +80,21 @@ namespace NumberGuesser
                             break;
                         }
                     }
-                    //display all guesses (need to not show unused guesses)
+                    //display all guesses ()
                     Console.WriteLine("So far you have guessed: ");
                     foreach (var guesses in pastGuesses)
                     {
-                        Console.WriteLine(guesses);
+                        if (guesses != 0)
+                        {
+                            if (guesses < correctNum)
+                            {
+                                Console.WriteLine(guesses + " (Low)");
+                            }
+                            else
+                            {
+                                Console.WriteLine(guesses + " (High)");
+                            }
+                        }
                     }
                 }
                 //inform of failure and quit
