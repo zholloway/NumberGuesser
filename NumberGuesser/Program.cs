@@ -19,6 +19,9 @@ namespace NumberGuesser
 
             while (guessCorrect == false)
             {
+                //create array to store past guesses
+                var pastGuesses = new decimal[5];
+
                 for (int i = 0; i < 5; i++)
                 {
                     // prompt user for a guess and inform of tries left
@@ -32,15 +35,42 @@ namespace NumberGuesser
                     var parseSuccess = Decimal.TryParse(userGuess, out parsedGuess);
                     if (parseSuccess)
                     {
-                        //if guess is low ask again
+
+                        //if guess is low ask again and add to pastGuesses
                         if (parsedGuess < correctNum)
                         {
-                            Console.WriteLine($"Sorry, {userGuess} is too low!");
+                            foreach (var position in pastGuesses)
+                            {
+                                if (parsedGuess == position)
+                                {
+                                    Console.WriteLine("You already guessed that! Feeling ok?");
+                                    pastGuesses[i] = parsedGuess;
+                                }
+                                else
+                                {
+                                    Console.WriteLine($"Sorry, {parsedGuess} is too low!");
+                                    pastGuesses[i] = parsedGuess;
+                                }
+                                break;
+                            }
                         }
-                        //if guess is high ask again
+                        //if guess is high ask again and add to pastGuesses
                         else if (parsedGuess > correctNum)
                         {
-                            Console.WriteLine($"Sorry, {userGuess} is too high!");
+                            foreach (var position in pastGuesses)
+                            {
+                                if (parsedGuess == position)
+                                {
+                                    Console.WriteLine("You already guessed that! Feeling ok?");
+                                    pastGuesses[i] = parsedGuess;
+                                }
+                                else
+                                {
+                                    Console.WriteLine($"Sorry, {parsedGuess} is too high!");
+                                    pastGuesses[i] = parsedGuess;
+                                }
+                                break;
+                            }
                         }
                         //if guess correct then inform of win and break loop
                         else
@@ -50,16 +80,22 @@ namespace NumberGuesser
                             break;
                         }
                     }
+                    //display all guesses (need to not show unused guesses)
+                    Console.WriteLine("So far you have guessed: ");
+                    foreach (var guesses in pastGuesses)
+                    {
+                        Console.WriteLine(guesses);
+                    }
                 }
-                //if all tries used, inform of failure and finish
+                //inform of failure and quit
                 if (guessCorrect == false)
                 {
-                    Console.WriteLine("You failed the NACA challenge.");
+                    Console.WriteLine("You failed");
                     guessCorrect = true;
                 }
-            }
 
-            Console.ReadLine();
+                Console.ReadLine();
+            }
         }
     }
 }
