@@ -36,13 +36,11 @@ namespace NumberGuesser
                         if (parsedGuess < correctNum)
                         {
                             Console.WriteLine($"Sorry, {userGuess} is too low!");
-                            Console.WriteLine(correctNum);
                         }
                         //if guess is high ask again
                         else if (parsedGuess > correctNum)
                         {
                             Console.WriteLine($"Sorry, {userGuess} is too high!");
-                            Console.WriteLine(correctNum);
                         }
                         //if guess correct then inform of win and break loop
                         else
