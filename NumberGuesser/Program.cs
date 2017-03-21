@@ -10,111 +10,164 @@ namespace NumberGuesser
     {
         static void Main(string[] args)
         {
-            //generate random number between 1 and 100
-            Random rand = new Random();
-            int correctNum = rand.Next(1, 101);
+            var decisionValid = false;
+            var gameComplete = false;
 
-            //user has maximum 5 incorrect guesses
-            var guessCorrect = false;
-
-            while (guessCorrect == false)
+            while (decisionValid == false || gameComplete == false)
             {
-                //create array to store past guesses
-                var pastGuesses = new decimal[5];
-
-                for (int i = 0; i < 5; i++)
+                //give options
+                Console.WriteLine("Would you like to guess a number or have the computer guess your number? Please type 'me' or 'computer'. Type 'quit' to exit.");
+                var gameDecision = Console.ReadLine();
+                if (gameDecision == "me")
                 {
-                    // prompt user for a guess and inform of tries left
+                    //enter written game -->
+                    
+                    //generate random number between 1 and 100
+                    Random rand = new Random();
+                    int correctNum = rand.Next(1, 101);
+                    var pastGuesses = new decimal[5];
+                    int i = 0;
 
-                    Console.WriteLine($"Guess a random number between 1 and 100! You have {5 - i} tries left.");
-
-                    var userGuess = Console.ReadLine();
-
-                    //make sure guess is a number
-                    decimal parsedGuess = 0;
-                    var parseSuccess = Decimal.TryParse(userGuess, out parsedGuess);
-                    if (parseSuccess)
+                    while (gameComplete == false && i < 5)
                     {
 
-                        //if guess is low ask again and add to pastGuesses
-                        if (parsedGuess < correctNum)
-                        {
-                            foreach (var position in pastGuesses)
+                            // prompt user for a guess and inform of tries left
+
+                            Console.WriteLine($"Guess a random number between 1 and 100! You have {5 - i} tries left.");
+
+                            var userGuess = Console.ReadLine();
+
+                            //make sure guess is a number
+                            decimal parsedGuess = 0;
+                            var parseSuccess = Decimal.TryParse(userGuess, out parsedGuess);
+
+                            //correct number cheat
+                            Console.WriteLine(correctNum);
+
+                            if (parseSuccess)
                             {
-                                if (parsedGuess == position)
-                                {
-                                    Console.WriteLine("You already guessed that! Feeling ok?");
-                                    pastGuesses[i] = parsedGuess;
-                                }
-                                else
+
+                                //if guess is low ask again and add to pastGuesses
+                                if (parsedGuess < correctNum)
                                 {
                                     Console.Write($"Sorry, {parsedGuess} is too low!");
-                                    if (parsedGuess < position)
+
+                                    var loopBreak = "";
+
+                                    foreach (var position in pastGuesses)
                                     {
-                                        Console.Write(" You already knew it'd be low.");
+                                        if (parsedGuess == position && loopBreak != "break it")
+                                        {
+                                            Console.Write(" You already guessed that! Feeling ok?");
+                                            pastGuesses[i] = parsedGuess;
+                                            loopBreak = "break it";
+                                        }
+                                        else
+                                        {
+                                            if (parsedGuess < position && position != 0 && loopBreak != "break it")
+                                            {
+                                                Console.Write(" You already knew it'd be low.");
+                                            }
+                                            pastGuesses[i] = parsedGuess;
+                                            loopBreak = "break it";
+                                        }
                                     }
                                     Console.WriteLine("");
-                                    pastGuesses[i] = parsedGuess;
                                 }
-                                break;
-                            }
-                        }
-                        //if guess is high ask again and add to pastGuesses
-                        else if (parsedGuess > correctNum)
-                        {
-                            foreach (var position in pastGuesses)
-                            {
-                                if (parsedGuess == position)
-                                {
-                                    Console.WriteLine("You already guessed that! Feeling ok?");
-                                    pastGuesses[i] = parsedGuess;
-                                }
-                                else
+                                //if guess is high ask again and add to pastGuesses
+                                else if (parsedGuess > correctNum)
                                 {
                                     Console.Write($"Sorry, {parsedGuess} is too high!");
-                                    if (parsedGuess > position)
+
+                                    var loopBreak = "";
+
+                                    foreach (var position in pastGuesses)
                                     {
-                                        Console.Write(" You already knew it'd be high.");
+                                        if (parsedGuess == position && loopBreak != "break it")
+                                        {
+                                            Console.WriteLine("You already guessed that! Feeling ok?");
+                                            pastGuesses[i] = parsedGuess;
+                                            loopBreak = "break it";
+                                        }
+                                        else
+                                        {
+                                            if (parsedGuess > position && position != 0)
+                                            {
+                                                Console.Write(" You already knew it'd be high.");
+                                            }
+                                            pastGuesses[i] = parsedGuess;
+                                            loopBreak = "break it";
+                                        }
                                     }
                                     Console.WriteLine("");
-                                    pastGuesses[i] = parsedGuess;
                                 }
-                                break;
+                                //if guess correct then inform of win and break loop
+                                else
+                                {
+                                    Console.WriteLine($"Correct! The number was {correctNum}.");
+                                    gameComplete = true;
+                                }
                             }
-                        }
-                        //if guess correct then inform of win and break loop
-                        else
-                        {
-                            Console.WriteLine($"Correct! The number was {correctNum}.");
-                            guessCorrect = true;
-                            break;
-                        }
-                    }
-                    //display all guesses ()
-                    Console.WriteLine("So far you have guessed: ");
-                    foreach (var guesses in pastGuesses)
-                    {
-                        if (guesses != 0)
-                        {
-                            if (guesses < correctNum)
-                            {
-                                Console.WriteLine(guesses + " (Low)");
-                            }
-                            else
-                            {
-                                Console.WriteLine(guesses + " (High)");
-                            }
-                        }
-                    }
-                }
-                //inform of failure and quit
-                if (guessCorrect == false)
-                {
-                    Console.WriteLine("You failed");
-                    guessCorrect = true;
-                }
 
-                Console.ReadLine();
+                        //display all guesses ()
+                        if (gameComplete != true)
+                        {
+                            Console.WriteLine("So far you have guessed: ");
+                            foreach (var guesses in pastGuesses)
+                            {
+                                if (guesses != 0)
+                                {
+                                    if (guesses < correctNum)
+                                    {
+                                        Console.WriteLine(guesses + " (Low)");
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine(guesses + " (High)");
+                                    }
+                                }
+                            }
+                        }
+
+                        //tick up try count
+                        i++;
+
+                        //inform of failure and quit
+                        if (i == 5)
+                        {
+                            Console.WriteLine("You failed");
+                        }
+                    }
+                    
+                    //break program loop
+                    decisionValid = true;
+                    gameComplete = true;
+                    Console.ReadLine();
+                }
+                else if (gameDecision == "computer")
+                {
+                    //create computer guesser
+                    Console.WriteLine("Nothing here yet, sorry.");
+
+                    //generate random number 1-100
+                    //ask if number is correct
+                    //user respond to indicate low, high, or correct
+                    //if low, create random number from guess#-100
+                    //if high, create random number from 1-guess#
+
+                    //break program loop
+                    decisionValid = true;
+                    gameComplete = true;
+                }
+                else if (gameDecision == "quit")
+                {
+                    decisionValid = true;
+                    gameComplete = true;
+                }
+                else
+                {
+                    Console.WriteLine("Oops! Please enter a valid option");
+                }
             }
         }
     }
